@@ -1,0 +1,61 @@
+import math
+import random
+import simpy
+import numpy as np
+
+
+def check_minus(MatixL):
+    # 检查非基本变量是否全为正
+    (h, w) = MatixL.shape
+    for i in range(w - 1):
+        if MatixL[h - 1][i] < 0:
+            return False
+    return True
+
+
+def search_mini(MatrixN):
+    pos = 0
+    key = MatrixN[1][1]
+    (h, w) = MatrixN.shape
+    for i in range(h):
+        for j in range(w):
+            if key > MatrixN[i][j]:
+                key = MatrixN[i][j]
+                pos = (i + 1) * w + (j + 1) * h
+
+    return pos
+
+
+def deal_cal(MatrixO, pos):
+    (h, w) = MatrixO.shape
+    row = pos / w
+    col = pos % w
+
+    # 枢纽行除以枢纽
+    for i in range(h):
+        MatrixO[row][i] = MatrixO[row][i]/MatrixO[row][col]
+
+    # 枢纽列除以枢纽且反号
+    for j in range(w):
+        MatrixO[col][j] = -MatrixO[row][i]/MatrixO[row][col]
+
+    # 处理其他元素
+    for i in range(h):
+        for j in range(w):
+            if i != row or j != col:
+                MatrixO[i][j] = MatrixO[i][i] - MatrixO[i][col]*MatrixO[row][j]/MatrixO[row][col]
+
+
+def form_only(MatrixI):
+    (h, w) = MatrixI.shape
+    while not check_minus(MatrixI):
+        pos = search_mini(MatrixI)
+        deal_cal(MatrixI, pos)
+
+def get_input():
+    str = input("Number of Constraints: ")
+
+
+
+
+
